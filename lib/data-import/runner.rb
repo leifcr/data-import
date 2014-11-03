@@ -13,7 +13,7 @@ module DataImport
         # pacman progressbar...
         bar = ProgressBar.create( format: '%a %bᗧ%i %p%% %t',
                     progress_mark:  ' ',
-                    remainder_mark: '･'
+                    remainder_mark: '･',
                     title: definition.name )
         DataImport.logger.info "Starting to import \"#{definition.name}\""
         context = ExecutionContext.new(resolved_plan, definition, bar)
