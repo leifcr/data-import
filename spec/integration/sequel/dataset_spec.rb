@@ -40,12 +40,12 @@ describe DataImport::Sequel::Dataset do
       subject.each_row do |row|
         yielded_ids << row[:id]
       end
-      yielded_ids.should == [2, 3, 5, 1, 4]
+      expect(yielded_ids).to eq([2, 3, 5, 1, 4])
     end
   end
 
   it '#count returns the total amount of records' do
-    subject.count.should == 5
+    expect(subject.count).to eq(5)
   end
 
   it 'uses the connections #before_filter' do
@@ -58,7 +58,7 @@ describe DataImport::Sequel::Dataset do
       yielded_ids << row[:description]
     end
 
-    yielded_ids.should == ['OPEN', 'OPEN', 'PROCESSING', 'DONE', 'DONE']
+    expect(yielded_ids).to eq(['OPEN', 'OPEN', 'PROCESSING', 'DONE', 'DONE'])
   end
 
 end

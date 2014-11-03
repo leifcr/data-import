@@ -36,7 +36,7 @@ describe 'insert unique records' do
 
   it 'skips doubly defined records' do
     DataImport.run_plan!(plan)
-    target_database[:cities].to_a.should == [{:id => 1, :name => 'Bern', :zip => 3012, :short_name => 'BE'},
-                                             {:id => 2, :name => 'Zürich', :zip => 8051, :short_name => 'ZU'}]
+    expect(target_database[:cities].to_a).to eq([{:id => 1, :name => 'Bern', :zip => 3012, :short_name => 'BE'},
+                                             {:id => 2, :name => 'Zürich', :zip => 8051, :short_name => 'ZU'}])
   end
 end

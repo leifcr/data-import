@@ -15,15 +15,15 @@ describe DataImport::Sequel::Writer do
     subject { DataImport::Sequel::InsertWriter.new(connection, table_name) }
 
     it 'writes a row to the specified table' do
-      subject.write_row(:id => 2, :name => 'Switzerland').should == 2
-      connection[:cities].to_a.should == [{:id => 2, :name => "Switzerland"}]
+      expect(subject.write_row(:id => 2, :name => 'Switzerland')).to eq(2)
+      expect(connection[:cities].to_a).to eq([{:id => 2, :name => "Switzerland"}])
     end
 
     it 'works with transactions' do
       subject.transaction do
-        subject.write_row(:id => 2, :name => 'Switzerland').should == 2
+        expect(subject.write_row(:id => 2, :name => 'Switzerland')).to eq(2)
       end
-      connection[:cities].to_a.should have(1).item
+      expect(connection[:cities].to_a.size).to eq(1)
     end
   end
 
@@ -35,22 +35,22 @@ describe DataImport::Sequel::Writer do
     end
 
     it 'writes a row to the specified table' do
-      subject.write_row(:id => 5, :name => 'Switzerland').should == 5
-      connection[:cities].to_a.should == [{:id => 5, :name => "Switzerland"}]
+      expect(subject.write_row(:id => 5, :name => 'Switzerland')).to eq(5)
+      expect(connection[:cities].to_a).to eq([{:id => 5, :name => "Switzerland"}])
     end
 
     it 'works with transactions' do
       subject.transaction do
-        subject.write_row(:id => 5, :name => 'Switzerland').should == 5
+        expect(subject.write_row(:id => 5, :name => 'Switzerland')).to eq(5)
       end
-      connection[:cities].to_a.should have(1).item
+      expect(connection[:cities].to_a.size).to eq(1)
     end
 
 
     it 'raises an error when no :id was in the row' do
-      lambda do
+      expect do
         subject.write_row(:name => 'this will not work')
-      end.should raise_error(DataImport::MissingIdError)
+      end.to raise_error(DataImport::MissingIdError)
     end
   end
 
@@ -58,22 +58,22 @@ describe DataImport::Sequel::Writer do
     subject { DataImport::Sequel::UniqueWriter.new(connection, table_name, :columns => [:name]) }
 
     it 'writes a row to the specified table' do
-      subject.write_row(:id => 3, :name => 'Italy').should == 3
-      connection[:cities].to_a.should == [{:id => 3, :name => 'Italy'}]
+      expect(subject.write_row(:id => 3, :name => 'Italy')).to eq(3)
+      expect(connection[:cities].to_a).to eq([{:id => 3, :name => 'Italy'}])
     end
 
     it 'works with transactions' do
       subject.transaction do
-        subject.write_row(:id => 3, :name => 'Italy').should == 3
+        expect(subject.write_row(:id => 3, :name => 'Italy')).to eq(3)
       end
-      connection[:cities].to_a.should have(1).item
+      expect(connection[:cities].to_a.size).to eq(1)
     end
 
     it 'doesn\'t write a record if a similar record exists' do
       connection[:cities].insert(:id => 6, :name => 'Spain')
 
-      subject.write_row(:id => 2, :name => 'Spain').should == 6
-      connection[:cities].to_a.should have(1).item
+      expect(subject.write_row(:id => 2, :name => 'Spain')).to eq(6)
+      expect(connection[:cities].to_a.size).to eq(1)
     end
   end
 

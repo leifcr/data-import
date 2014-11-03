@@ -10,13 +10,13 @@ describe 'mappings' do
       it '#apply! changes the column name form <old> to <new> when applied' do
         row = {:sLegacyID => 5}
         subject.apply!(nil, nil, row, output_row)
-        output_row.should == {:id => 5}
+        expect(output_row).to eq({:id => 5})
       end
 
       it '#apply! does nothing when the mapped column is not present' do
         row = {:sOtherLegacyID => 5}
         subject.apply!(nil, nil, row, output_row)
-        output_row.should == {}
+        expect(output_row).to eq({})
       end
     end
   end
@@ -38,7 +38,7 @@ describe 'mappings' do
         it 'calls the block with the column value' do
           row = {:sLegacyID => 4}
           subject.apply!(definition, context, row, output_row)
-          output_row.should == {:id_times_two => 8}
+          expect(output_row).to eq({:id_times_two => 8})
         end
       end
 
@@ -54,7 +54,7 @@ describe 'mappings' do
         it 'calls the block with the column values' do
           row = {:sLegacyID => 3, :strLegacyName => 'Times four: '}
           subject.apply!(definition, context, row, output_row)
-          output_row.should == {:result => 'Times four: 12'}
+          expect(output_row).to eq({:result => 'Times four: 12'})
         end
       end
 
@@ -69,7 +69,7 @@ describe 'mappings' do
         it 'passes the wole row to the block' do
           row = {:sLegacyID => 12, :strSomeName => 'John', :strSomeOtherString => 'Jane'}
           subject.apply!(definition, context, row, output_row)
-          output_row.should == {:received_row => row}
+          expect(output_row).to eq({:received_row => row})
         end
       end
     end
@@ -90,10 +90,10 @@ describe 'mappings' do
       it 'passes the wole row to the block' do
         row = {:sLegacyID => 12, :strSomeName => 'John', :strSomeOtherString => 'Jane'}
 
-        context.stub(:arguments).and_return({:sLegacyID => 12, :strSomeName => 'John', :strSomeOtherString => 'Jane'})
+        allow(context).to receive(:arguments).and_return({:sLegacyID => 12, :strSomeName => 'John', :strSomeOtherString => 'Jane'})
 
         subject.apply!(definition, context, row, output_row)
-        output_row.should == {:result => 'John12Jane'}
+        expect(output_row).to eq({:result => 'John12Jane'})
       end
     end
   end
@@ -109,11 +109,11 @@ describe 'mappings' do
         row = {:sLegacyAddressId => 28}
 
         address_definition = double
-        context.should_receive(:definition).with('OldAddress').and_return(address_definition)
-        address_definition.should_receive(:identify_by).with(:reference, 28).and_return(4)
+        expect(context).to receive(:definition).with('OldAddress').and_return(address_definition)
+        expect(address_definition).to receive(:identify_by).with(:reference, 28).and_return(4)
 
         subject.apply!(definition, context, row, output_row)
-        output_row.should == {:address_id => 4}
+        expect(output_row).to eq({:address_id => 4})
       end
     end
 
@@ -124,8 +124,8 @@ describe 'mappings' do
         row = {:sLegacyAddressId => 28}
 
         address_definition = double
-        context.should_receive(:definition).with('OldAddress').and_return(address_definition)
-        address_definition.should_receive(:identify_by).with(:id, 28)
+        expect(context).to receive(:definition).with('OldAddress').and_return(address_definition)
+        expect(address_definition).to receive(:identify_by).with(:id, 28)
 
         subject.apply!(definition, context, row, output_row)
       end
@@ -138,7 +138,7 @@ describe 'mappings' do
 
     it "#apply! adds the passed seed-data" do
       subject.apply!(nil, nil, nil, output_row)
-      output_row.should == seed_hash
+      expect(output_row).to eq(seed_hash)
     end
   end
 end

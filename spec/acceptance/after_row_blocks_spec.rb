@@ -43,8 +43,8 @@ describe 'execute code after each row' do
 
   it 'should execute the after row blocks' do
     DataImport.run_plan!(plan)
-    target_database[:contacts].to_a.should == [{:id => 1, :firstname => "Peter", :lastname => "Wood"},
-                                               {:id => 2, :firstname => "Jane", :lastname => "Doe"}]
+    expect(target_database[:contacts].to_a).to eq([{:id => 1, :firstname => "Peter", :lastname => "Wood"},
+                                               {:id => 2, :firstname => "Jane", :lastname => "Doe"}])
   end
 
 end

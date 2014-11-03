@@ -8,30 +8,30 @@ describe DataImport::Definition::Simple::Importer do
   let(:definition) { DataImport::Definition::Simple.new 'A', source, target }
   let(:progress_reporter) { double('ProgressReporter') }
   let(:context) { double('Context', :name => 'A', :progress_reporter => progress_reporter) }
-  before { context.stub(:definition).with('C').and_return(other_definition) }
+  before { allow(context).to receive(:definition).with('C').and_return(other_definition) }
   subject { described_class.new(context, definition) }
 
   describe "#run" do
     let(:reader) { double }
     let(:writer) { double }
-    before { definition.stub(:reader => reader) }
-    before { definition.stub(:writer => writer) }
-    before { writer.stub(:transaction).and_yield }
+    before { allow(definition).to receive_messages(:reader => reader) }
+    before { allow(definition).to receive_messages(:writer => writer) }
+    before { allow(writer).to receive(:transaction).and_yield }
 
     it "call #import_row for each row" do
-      definition.reader.should_receive(:each_row).
+      expect(definition.reader).to receive(:each_row).
         and_yield(:a => :b).
         and_yield(:c => :d)
 
-      subject.should_receive(:import_row).with(:a => :b)
-      subject.should_receive(:import_row).with(:c => :d)
-      progress_reporter.should_receive(:inc).twice
+      expect(subject).to receive(:import_row).with(:a => :b)
+      expect(subject).to receive(:import_row).with(:c => :d)
+      expect(progress_reporter).to receive(:inc).twice
       subject.run
     end
 
     context 'after blocks' do
       before do
-        definition.reader.stub(:each_row)
+        allow(definition.reader).to receive(:each_row)
       end
 
       it "run after the data import" do
@@ -41,7 +41,7 @@ describe DataImport::Definition::Simple::Importer do
         end
 
         subject.run
-        executed.should == true
+        expect(executed).to eq(true)
       end
 
       it "have access to other definitions" do
@@ -51,7 +51,7 @@ describe DataImport::Definition::Simple::Importer do
         end
 
         subject.run
-        found_definition.should == other_definition
+        expect(found_definition).to eq(other_definition)
       end
 
       it 'have access to the definition instance' do
@@ -61,7 +61,7 @@ describe DataImport::Definition::Simple::Importer do
         end
 
         subject.run
-        found_name.should == 'A'
+        expect(found_name).to eq('A')
       end
     end
 
@@ -78,18 +78,18 @@ describe DataImport::Definition::Simple::Importer do
           true
         end
 
-        subject.should_receive(:map_row).with(instance_of(DataImport::Definition::Simple::Context), {:id => 1}).and_return({:new_id => 1})
-        writer.stub(:write_row)
+        expect(subject).to receive(:map_row).with(instance_of(DataImport::Definition::Simple::Context), {:id => 1}).and_return({:new_id => 1})
+        allow(writer).to receive(:write_row)
 
         subject.import_row(:id => 1)
-        validated_mapped_rows.should == [{:new_id => 1}]
-        validated_rows.should == [{:id => 1}]
+        expect(validated_mapped_rows).to eq([{:new_id => 1}])
+        expect(validated_rows).to eq([{:id => 1}])
       end
 
       it 'doesn\'t insert an invalid row' do
         definition.row_validation_blocks << Proc.new { false }
 
-        writer.should_not_receive(:write_row)
+        expect(writer).not_to receive(:write_row)
 
         subject.import_row(:id => 1)
       end
@@ -107,14 +107,14 @@ describe DataImport::Definition::Simple::Importer do
         output_rows << output_row
       end
 
-      subject.should_receive(:map_row).with(instance_of(DataImport::Definition::Simple::Context), {:id => 1}).and_return({:new_id => 1})
-      subject.should_receive(:map_row).with(instance_of(DataImport::Definition::Simple::Context), {:id => 2}).and_return({:new_id => 2})
-      writer.stub(:write_row)
+      expect(subject).to receive(:map_row).with(instance_of(DataImport::Definition::Simple::Context), {:id => 1}).and_return({:new_id => 1})
+      expect(subject).to receive(:map_row).with(instance_of(DataImport::Definition::Simple::Context), {:id => 2}).and_return({:new_id => 2})
+      allow(writer).to receive(:write_row)
       subject.import_row(:id => 1)
       subject.import_row(:id => 2)
 
-      input_rows.should == [{:id => 1}, {:id => 2}]
-      output_rows.should == [{:new_id => 1}, {:new_id => 2}]
+      expect(input_rows).to eq([{:id => 1}, {:id => 2}])
+      expect(output_rows).to eq([{:new_id => 1}, {:new_id => 2}])
     end
   end
 
@@ -134,25 +134,25 @@ describe DataImport::Definition::Simple::Importer do
     describe "#map_row" do
       it 'calls apply for all mappings' do
         legacy_row = {:legacy_id => 1, :legacy_name => 'hans'}
-        id_mapping.should_receive(:apply!).with(definition, context, legacy_row, {})
-        name_mapping.should_receive(:apply!).with(definition, context, legacy_row, {})
-        subject.map_row(context, legacy_row).should == {}
+        expect(id_mapping).to receive(:apply!).with(definition, context, legacy_row, {})
+        expect(name_mapping).to receive(:apply!).with(definition, context, legacy_row, {})
+        expect(subject.map_row(context, legacy_row)).to eq({})
       end
     end
 
     describe "#import_row" do
       let(:row) { {:id => 1} }
-      before { subject.stub(:map_row => row) }
+      before { allow(subject).to receive_messages(:map_row => row) }
 
       it "executes the insertion" do
-        writer.should_receive(:write_row).with({:id => 1})
-        definition.stub(:row_imported)
+        expect(writer).to receive(:write_row).with({:id => 1})
+        allow(definition).to receive(:row_imported)
         subject.import_row(row)
       end
 
       it "adds the generated id to the id mapping of the definition" do
-        definition.writer.stub(:write_row).and_return(15)
-        definition.should_receive(:row_imported).with(15, {:id => 1})
+        allow(definition.writer).to receive(:write_row).and_return(15)
+        expect(definition).to receive(:row_imported).with(15, {:id => 1})
         subject.import_row(:id => 1)
       end
     end

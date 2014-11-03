@@ -109,7 +109,7 @@ describe "simple mappings" do
 
   it 'mapps columns to the new schema' do
     DataImport.run_plan!(plan)
-    target_database[:animals].to_a.should == [
+    expect(target_database[:animals].to_a).to eq([
                                               {:id => 1, :name => "Tiger", :age => 23, :danger_note => 'This animal is dangerous!',
                                                 :danger_rating => 3, :formatted_name_cache => 'Tiger (23)',
                                                 :legacy_backup => "ID was 1"},
@@ -119,25 +119,25 @@ describe "simple mappings" do
                                               {:id => 1293, :name => "Horse", :age => 11, :danger_note => nil,
                                                 :danger_rating => 2, :formatted_name_cache => 'Horse (11)',
                                                 :legacy_backup => "ID was 1293"}
-                                             ]
+                                             ])
   end
 
   it 'runs after blocks after the rows were imported' do
     DataImport.run_plan!(plan)
-    target_database[:danger_ratings].to_a.should == [{:id => 1, :description => 'none'},
+    expect(target_database[:danger_ratings].to_a).to eq([{:id => 1, :description => 'none'},
                                                      {:id => 2, :description => 'medium'},
-                                                     {:id => 3, :description => 'high'}]
+                                                     {:id => 3, :description => 'high'}])
   end
 
   it 'runs after_row blocks after every row' do
     DataImport.run_plan!(plan)
-    target_database[:animal_logs].map do |log|
+    expect(target_database[:animal_logs].map do |log|
       log.delete(:id)
       log
-    end.to_a.should == [{:occured_at => Date.new(2000, 6, 1), :event => "Tiger was born"},
+    end.to_a).to eq([{:occured_at => Date.new(2000, 6, 1), :event => "Tiger was born"},
                         {:occured_at => Date.new(1998, 11, 9), :event => "Cat was born"},
                         {:occured_at => Date.new(2000, 12, 21), :event => "Horse was born"},
-                        {:occured_at => Date.new(2011, 4, 26), :event => "Horse died"}]
+                        {:occured_at => Date.new(2011, 4, 26), :event => "Horse died"}])
 
   end
 end

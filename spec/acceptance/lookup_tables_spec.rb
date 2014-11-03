@@ -91,11 +91,11 @@ describe "lookup tables" do
 
   it 'maps columns to the new schema' do
     DataImport.run_plan!(plan)
-    target_database[:posts].to_a.should == [{:id => 7, :article_id => 2, :similar_article_id => 1},
+    expect(target_database[:posts].to_a).to eq([{:id => 7, :article_id => 2, :similar_article_id => 1},
                                             {:id => 8, :article_id => 1, :similar_article_id => 2},
                                             {:id => 9, :article_id => 2, :similar_article_id => 1},
                                             {:id => 10, :article_id => nil, :similar_article_id => nil},
-                                            {:id => 11, :article_id => 4, :similar_article_id => nil}]
+                                            {:id => 11, :article_id => 4, :similar_article_id => nil}])
   end
 
 end

@@ -19,8 +19,8 @@ describe DataImport::DependencyResolver do
   }
 
   before do
-    strategy.stub(:call => ['A', 'B'])
-    strategy.should_receive(:new).with(graph).and_return(strategy)
+    allow(strategy).to receive_messages(:call => ['A', 'B'])
+    expect(strategy).to receive(:new).with(graph).and_return(strategy)
   end
 
   it 'should return an ExecutionPlan' do
@@ -28,13 +28,13 @@ describe DataImport::DependencyResolver do
     plan
 
     resolved_plan = double
-    DataImport::ExecutionPlan.should_receive(:new).with([a, b]).and_return(resolved_plan)
-    subject.resolve.should == resolved_plan
+    expect(DataImport::ExecutionPlan).to receive(:new).with([a, b]).and_return(resolved_plan)
+    expect(subject.resolve).to eq(resolved_plan)
   end
 
   it 'passes the options to the resolving strategy' do
     options = {:run_only => ['A', 'B']}
-    strategy.should_receive(:call).with(options)
+    expect(strategy).to receive(:call).with(options)
 
     subject.resolve(options)
   end
@@ -54,7 +54,7 @@ describe DataImport::DependencyResolver, 'algorythm' do
     }
 
     it 'can limit the definitions which should run' do
-      subject.call(:run_only => ['A', 'C']).should == ['A', 'C']
+      expect(subject.call(:run_only => ['A', 'C'])).to eq(['A', 'C'])
     end
   end
 
@@ -69,11 +69,11 @@ describe DataImport::DependencyResolver, 'algorythm' do
     }
 
     it 'executes leaf-definitions first and works to the top' do
-      subject.call.should == ['A', 'B', 'A1', 'A-B-1', 'AB-A1-1']
+      expect(subject.call).to eq(['A', 'B', 'A1', 'A-B-1', 'AB-A1-1'])
     end
 
     it 'runs only necessary definitions when :run_only is passed' do
-      subject.call(:run_only => ['A1', 'B']).should == ['A', 'B', 'A1']
+      expect(subject.call(:run_only => ['A1', 'B'])).to eq(['A', 'B', 'A1'])
     end
   end
 
@@ -87,7 +87,7 @@ describe DataImport::DependencyResolver, 'algorythm' do
     }
 
     it 'runs only necessary definitions when :run_only is passed' do
-      subject.call(:run_only => ['A11']).should == ['A', 'B', 'A1', 'A11']
+      expect(subject.call(:run_only => ['A11'])).to eq(['A', 'B', 'A1', 'A11'])
     end
   end
 
@@ -99,9 +99,9 @@ describe DataImport::DependencyResolver, 'algorythm' do
     }
 
     it "can't resolve them and raises an exception" do
-      lambda do
+      expect do
         subject.call
-      end.should raise_error(DataImport::CircularDependencyError)
+      end.to raise_error(DataImport::CircularDependencyError)
     end
   end
 
@@ -111,9 +111,9 @@ describe DataImport::DependencyResolver, 'algorythm' do
     }
 
     it 'raises an error' do
-      lambda do
+      expect do
         subject.call
-      end.should raise_error(DataImport::MissingDefinitionError)
+      end.to raise_error(DataImport::MissingDefinitionError)
     end
 
   end

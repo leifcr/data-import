@@ -38,8 +38,8 @@ describe 'multiple configuration files' do
 
       DataImport.run_plan!(plan)
 
-      manufacturer_target[:manufacturers].to_a.should == [{:id => 1, :name => 'Ferrari'}]
-      car_target[:cars].to_a.should == [{:manufacturer_id => 1, :name => 'Testarossa'}]
+      expect(manufacturer_target[:manufacturers].to_a).to eq([{:id => 1, :name => 'Ferrari'}])
+      expect(car_target[:cars].to_a).to eq([{:manufacturer_id => 1, :name => 'Testarossa'}])
     end
   end
 
@@ -47,9 +47,9 @@ describe 'multiple configuration files' do
     let(:config_files) { File.join(File.dirname(__FILE__), 'multiple_config_files_mappings', 'cars_without_source.rb') }
 
     it 'raises an exception' do
-      lambda do
+      expect do
         DataImport::Dsl.evaluate_import_config(config_files)
-      end.should raise_error(DataImport::MissingDatabaseError)
+      end.to raise_error(DataImport::MissingDatabaseError)
     end
   end
 
@@ -57,9 +57,9 @@ describe 'multiple configuration files' do
     let(:config_files) { File.join(File.dirname(__FILE__), 'multiple_config_files_mappings', 'cars_without_target.rb') }
 
     it 'raises an exception' do
-      lambda do
+      expect do
         DataImport::Dsl.evaluate_import_config(config_files)
-      end.should raise_error(DataImport::MissingDatabaseError)
+      end.to raise_error(DataImport::MissingDatabaseError)
     end
   end
 end

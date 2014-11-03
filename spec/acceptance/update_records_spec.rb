@@ -41,8 +41,8 @@ describe "update existing records" do
 
   it 'mapps columns to the new schema' do
     DataImport.run_plan!(plan)
-    target_database[:articles].to_a.should == [{:id => 12, :title => "The Book!", :author => 'Adam K.'},
-                                               {:id => 145, :title => "The other Book.", :author => 'James G.'}]
+    expect(target_database[:articles].to_a).to eq([{:id => 12, :title => "The Book!", :author => 'Adam K.'},
+                                               {:id => 145, :title => "The other Book.", :author => 'James G.'}])
   end
 
 end

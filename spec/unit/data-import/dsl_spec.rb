@@ -26,7 +26,7 @@ describe DataImport::Dsl do
 
     describe "#source" do
       it "creates a connection to the database" do
-        DataImport::Database.should_receive(:connect).with(:options)
+        expect(DataImport::Database).to receive(:connect).with(:options)
         subject.source :options
       end
 
@@ -34,13 +34,13 @@ describe DataImport::Dsl do
       it "sets the source" do
         allow(DataImport::Database).to receive(:connect).and_return(source)
         subject.source :options
-        subject.source_database.should == source
+        expect(subject.source_database).to eq(source)
       end
 
       it 'adds the before block to source database when specified' do
         my_filter = lambda {}
         allow(DataImport::Database).to receive(:connect).and_return(source)
-        source.should_receive(:before_filter=).with(my_filter)
+        expect(source).to receive(:before_filter=).with(my_filter)
         plan = DataImport::Dsl.define do
           source 'sqlite:/'
           before_filter &my_filter
@@ -50,7 +50,7 @@ describe DataImport::Dsl do
 
     describe "#target" do
       it "creates a connection to the database" do
-        DataImport::Database.should_receive(:connect).with(:options)
+        expect(DataImport::Database).to receive(:connect).with(:options)
         subject.target :options
       end
 
@@ -58,7 +58,7 @@ describe DataImport::Dsl do
       it "sets the target" do
         allow(DataImport::Database).to receive(:connect).and_return(target)
         subject.target :options
-        subject.target_database.should == target
+        expect(subject.target_database).to eq(target)
       end
     end
 
@@ -68,8 +68,8 @@ describe DataImport::Dsl do
         allow(subject).to receive(:target_database).and_return(nil)
 
         definition = double
-        DataImport::Definition::Simple.should_receive(:new).with('Import 5', nil, nil).and_return(definition)
-        plan.should_receive(:add_definition).with(definition)
+        expect(DataImport::Definition::Simple).to receive(:new).with('Import 5', nil, nil).and_return(definition)
+        expect(plan).to receive(:add_definition).with(definition)
         subject.import('Import 5') {}
       end
 
@@ -78,8 +78,8 @@ describe DataImport::Dsl do
         allow(subject).to receive(:target_database).and_return(:target)
 
         definition = double
-        DataImport::Definition::Simple.should_receive(:new).with('a', :source, :target).and_return(definition)
-        plan.should_receive(:add_definition).with(definition)
+        expect(DataImport::Definition::Simple).to receive(:new).with('a', :source, :target).and_return(definition)
+        expect(plan).to receive(:add_definition).with(definition)
 
         subject.import('a') {}
       end
@@ -107,8 +107,8 @@ describe DataImport::Dsl do
         allow(subject).to receive(:source_database).and_return(nil)
         allow(subject).to receive(:target_database).and_return(nil)
 
-        DataImport::Definition::Script.should_receive(:new).with('Script', nil, nil).and_return(definition)
-        plan.should_receive(:add_definition).with(definition)
+        expect(DataImport::Definition::Script).to receive(:new).with('Script', nil, nil).and_return(definition)
+        expect(plan).to receive(:add_definition).with(definition)
         subject.script('Script') {}
       end
 
@@ -116,8 +116,8 @@ describe DataImport::Dsl do
         allow(subject).to receive(:source_database).and_return(:source)
         allow(subject).to receive(:target_database).and_return(:target)
 
-        DataImport::Definition::Script.should_receive(:new).with('a', :source, :target).and_return(definition)
-        plan.should_receive(:add_definition).with(definition)
+        expect(DataImport::Definition::Script).to receive(:new).with('a', :source, :target).and_return(definition)
+        expect(plan).to receive(:add_definition).with(definition)
 
         subject.script('a') {}
       end

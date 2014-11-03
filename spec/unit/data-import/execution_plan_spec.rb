@@ -8,19 +8,19 @@ describe DataImport::ExecutionPlan do
 
   it 'can be created with a set of definitions' do
     plan = DataImport::ExecutionPlan.new(definitions)
-    plan.definitions.should == definitions
+    expect(plan.definitions).to eq(definitions)
   end
 
   it 'raises an error when a non-existing definition is fetched' do
-    lambda do
+    expect do
       subject.definition('I-do-not-exist')
-    end.should raise_error(DataImport::MissingDefinitionError)
+    end.to raise_error(DataImport::MissingDefinitionError)
   end
 
   it 'definitions can be added' do
     subject.add_definition(people)
     subject.add_definition(houses)
-    subject.definitions.should == [people, houses]
+    expect(subject.definitions).to eq([people, houses])
   end
 
   context 'plan with definitions' do
@@ -32,11 +32,11 @@ describe DataImport::ExecutionPlan do
       subject.add_definition(cats)
       subject.add_definition(dogs)
 
-      subject.definitions.should == [people, houses, cats, dogs]
+      expect(subject.definitions).to eq([people, houses, cats, dogs])
     end
 
     it 'definitions can be fetched by name' do
-      subject.definition('People').should == people
+      expect(subject.definition('People')).to eq(people)
     end
   end
 

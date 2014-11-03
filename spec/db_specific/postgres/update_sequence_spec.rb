@@ -21,6 +21,6 @@ describe DataImport::Sequel::Postgres::UpdateSequence do
     end
     sequence_name = connection.db.primary_key_sequence(table_name)
     last_value = connection.db["SELECT last_value FROM #{sequence_name}"].first[:last_value]
-    last_value.should == 19
+    expect(last_value).to eq(19)
   end
 end

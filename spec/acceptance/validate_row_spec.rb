@@ -33,7 +33,7 @@ describe 'validate rows before insertion' do
 
   it 'skip invalid records' do
     DataImport.run_plan!(plan)
-    target_database[:females].to_a.should == [{:name => 'Tina', :gender => 'f'}]
+    expect(target_database[:females].to_a).to eq([{:name => 'Tina', :gender => 'f'}])
   end
 
 end

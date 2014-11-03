@@ -12,7 +12,7 @@ module DataImport
           @definition.writer.transaction do
             @definition.reader.each_row do |row|
               import_row row
-              @context.progress_reporter.inc
+              @context.progress_reporter.increment
             end
             @definition.after_blocks.each do |block|
               @context.instance_exec(@context, &block)

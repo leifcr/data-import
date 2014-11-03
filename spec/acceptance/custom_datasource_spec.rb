@@ -47,8 +47,8 @@ describe "simple mappings" do
 
   it 'uses the custom dataset for the migration' do
     DataImport.run_plan!(plan)
-    target_database[:items].to_a.should == [{:id => 4, :title => 'Lego', :ordered_count => 3},
+    expect(target_database[:items].to_a).to eq([{:id => 4, :title => 'Lego', :ordered_count => 3},
                                             {:id => 5, :title => 'Computer', :ordered_count => 1},
-                                            {:id => 6, :title => 'Car', :ordered_count => 2}]
+                                            {:id => 6, :title => 'Car', :ordered_count => 2}])
   end
 end

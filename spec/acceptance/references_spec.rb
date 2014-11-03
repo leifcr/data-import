@@ -65,12 +65,12 @@ describe "references on tables" do
   it 'maps to old address id to the new one' do
     DataImport.run_plan!(plan, :only => ['person'])
     address_id = target_database[:addresses].first[:id]
-    target_database[:people].to_a.should == [{:address_id => address_id}]
+    expect(target_database[:people].to_a).to eq([{:address_id => address_id}])
   end
 
   it 'maps to old address id to the new one using the reference lookup' do
     DataImport.run_plan!(plan, :only => ['house'])
     address_id = target_database[:addresses].first[:id]
-    target_database[:houses].to_a.should == [{:address_id => address_id}]
+    expect(target_database[:houses].to_a).to eq([{:address_id => address_id}])
   end
 end

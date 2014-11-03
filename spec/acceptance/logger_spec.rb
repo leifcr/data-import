@@ -49,7 +49,7 @@ describe 'logger' do
 
       DataImport.run_plan!(plan)
 
-      messages.string.strip.should == "INFO: Starting to import \"People\"\nINFO: Row {:Name=>\"Jack\", :Gender=>\"m\"} skipped since the gender is male"
+      expect(messages.string.strip).to eq("INFO: Starting to import \"People\"\nINFO: Row {:Name=>\"Jack\", :Gender=>\"m\"} skipped since the gender is male")
     ensure
       DataImport.full_logger = old_logger
     end

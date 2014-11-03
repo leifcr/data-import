@@ -47,16 +47,16 @@ describe DataImport::Definition::Lookup do
 
     it 'should not allow to define two lookup-tables with the same name' do
       subject.lookup_for :code
-      lambda do
+      expect do
         subject.lookup_for :code
-      end.should raise_error(ArgumentError, "lookup-table for column 'code' was already defined")
+      end.to raise_error(ArgumentError, "lookup-table for column 'code' was already defined")
     end
 
     it 'should not allow to define two lookup-tables for the same column' do
       subject.lookup_for :code
-      lambda do
+      expect do
         subject.lookup_for :same_code, :column => :code
-      end.should raise_error(ArgumentError, "lookup-table for column 'code' was already defined")
+      end.to raise_error(ArgumentError, "lookup-table for column 'code' was already defined")
     end
   end
 
@@ -64,9 +64,9 @@ describe DataImport::Definition::Lookup do
     before { subject.lookup_for :code }
 
     it 'does not add any mappings when no lookup-attributes are given' do
-      lambda do
+      expect do
         subject.row_imported(66, :undefined_attribute => 'value-to-lookup')
-      end.should_not raise_error
+      end.not_to raise_error
     end
 
     it 'stores added mappings' do
@@ -75,7 +75,7 @@ describe DataImport::Definition::Lookup do
 
       subject.row_imported(id, :code => lookup_value)
 
-      subject.identify_by(:code, lookup_value).should == id
+      expect(subject.identify_by(:code, lookup_value)).to eq(id)
     end
 
     it 'allows to specify a column name different form the lookup name' do
@@ -85,20 +85,20 @@ describe DataImport::Definition::Lookup do
 
       subject.row_imported(id, :strRef => ref)
 
-      subject.identify_by(:reference, ref).should == id
+      expect(subject.identify_by(:reference, ref)).to eq(id)
     end
 
     it 'raises an exception when trying accessing an undefined lookup-table' do
-      lambda do
+      expect do
         subject.identify_by(:undefined_lookup_table, 'this-wont-work')
-      end.should raise_error(ArgumentError, "no lookup-table defined named 'undefined_lookup_table'")
+      end.to raise_error(ArgumentError, "no lookup-table defined named 'undefined_lookup_table'")
     end
 
     it 'do not add nil value mappings' do
       do_not_map_this_id = 6
       subject.row_imported(do_not_map_this_id, :code => nil)
 
-      subject.identify_by(:code, nil).should == nil
+      expect(subject.identify_by(:code, nil)).to eq(nil)
     end
   end
 
@@ -111,12 +111,12 @@ describe DataImport::Definition::Lookup do
       id = 9
       subject.row_imported(id, :reference => 'i-AM-a-REF')
 
-      subject.identify_by(:reference, 'i-am-a-reF').should == id
+      expect(subject.identify_by(:reference, 'i-am-a-reF')).to eq(id)
     end
 
     it 'works with nil values' do
       id = 9
-      subject.identify_by(:reference, nil).should == nil
+      expect(subject.identify_by(:reference, nil)).to eq(nil)
     end
   end
 end

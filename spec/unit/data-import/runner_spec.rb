@@ -25,16 +25,16 @@ describe DataImport::Runner do
     subject { DataImport::Runner.new(plan, mock_progress_class) }
 
     it 'runs a set of definitions' do
-      articles.should_receive(:run)
-      people.should_receive(:run)
-      animals.should_receive(:run)
+      expect(articles).to receive(:run)
+      expect(people).to receive(:run)
+      expect(animals).to receive(:run)
 
       subject.run
     end
 
     it ":only limits the definitions, which will be run" do
-      people.should_receive(:run)
-      articles.should_receive(:run)
+      expect(people).to receive(:run)
+      expect(articles).to receive(:run)
 
       subject.run :only => ['People', 'Articles']
     end

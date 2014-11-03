@@ -12,10 +12,10 @@ describe DataImport::Definition::Script do
       found_name = nil
       subject.body = Proc.new { found_name = name }
 
-      target.should_receive(:transaction).and_yield
+      expect(target).to receive(:transaction).and_yield
 
       subject.run(context)
-      found_name.should == 'ABC'
+      expect(found_name).to eq('ABC')
     end
   end
 end

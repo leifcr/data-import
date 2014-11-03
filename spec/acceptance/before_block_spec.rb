@@ -42,8 +42,8 @@ describe "before filter" do
 
   it 'mapps columns to the new schema' do
     DataImport.run_plan!(plan)
-    target_database[:users].to_a.should == [{:id => 1, :email => "jane.meiers@gmx.net", :username => 'janemrs'},
-                                            {:id => 2, :email => "john.doe@gmail.com", :username => 'john_doe'}]
+    expect(target_database[:users].to_a).to eq([{:id => 1, :email => "jane.meiers@gmx.net", :username => 'janemrs'},
+                                            {:id => 2, :email => "john.doe@gmail.com", :username => 'john_doe'}])
   end
 
 end

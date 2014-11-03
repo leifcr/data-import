@@ -8,9 +8,9 @@ describe DataImport::Definition::Simple do
 
   describe "#mappings" do
     it "returns an empty hash by default" do
-      lambda do
+      expect do
         subject.mappings.next
-      end.should raise_error(StopIteration)
+      end.to raise_error(StopIteration)
     end
   end
 
@@ -18,15 +18,15 @@ describe DataImport::Definition::Simple do
     it 'adds a mapping to the definition' do
       mapping = double
       subject.add_mapping(mapping)
-      subject.mappings.next.should == mapping
+      expect(subject.mappings.next).to eq(mapping)
     end
   end
 
   describe '#run' do
     it 'executes the definition and displays the progress' do
       importer = double
-      DataImport::Definition::Simple::Importer.should_receive(:new).with('CONTEXT', subject).and_return(importer)
-      importer.should_receive(:run)
+      expect(DataImport::Definition::Simple::Importer).to receive(:new).with('CONTEXT', subject).and_return(importer)
+      expect(importer).to receive(:run)
       subject.run('CONTEXT')
     end
   end

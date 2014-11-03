@@ -29,12 +29,12 @@ describe DataImport::Sequel::Table do
         subject.each_row do |row|
           yielded_ids << row[:id]
         end
-        yielded_ids.should == [1, 2, 3, 4, 5, 1002]
+        expect(yielded_ids).to eq([1, 2, 3, 4, 5, 1002])
       end
     end
 
     it '#count returns the total amount of records' do
-      subject.count.should == 6
+      expect(subject.count).to eq(6)
     end
   end
 
@@ -47,12 +47,12 @@ describe DataImport::Sequel::Table do
         subject.each_row do |row|
           yielded_ids << row[:id]
         end
-        yielded_ids.should == [1, 2, 3, 4, 5, 1002]
+        expect(yielded_ids).to eq([1, 2, 3, 4, 5, 1002])
       end
     end
 
     it '#count returns the total amount of records' do
-      subject.count.should == 6
+      expect(subject.count).to eq(6)
     end
   end
 end

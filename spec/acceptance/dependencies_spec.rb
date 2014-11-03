@@ -53,20 +53,20 @@ describe 'definition dependencies' do
   it 'lets you import a subset of only' do
     DataImport.run_plan!(plan, :only => ['Colors', 'Drivers'])
 
-    target_database[:colors].count.should == 1
-    target_database[:drivers].count.should == 1
+    expect(target_database[:colors].count).to eq(1)
+    expect(target_database[:drivers].count).to eq(1)
 
-    target_database[:cars].count.should == 0
-    target_database[:wheels].count.should == 0
+    expect(target_database[:cars].count).to eq(0)
+    expect(target_database[:wheels].count).to eq(0)
   end
 
   it 'resolves dependencies' do
     DataImport.run_plan!(plan, :only => ['Wheels'])
 
-    target_database[:colors].count.should == 1
-    target_database[:drivers].count.should == 1
-    target_database[:cars].count.should == 1
-    target_database[:wheels].count.should == 1
+    expect(target_database[:colors].count).to eq(1)
+    expect(target_database[:drivers].count).to eq(1)
+    expect(target_database[:cars].count).to eq(1)
+    expect(target_database[:wheels].count).to eq(1)
   end
 
   describe "circular dependencies" do
@@ -81,9 +81,9 @@ describe 'definition dependencies' do
     end
 
     it 'recognizes circular dependencies' do
-      lambda do
+      expect do
         DataImport.run_plan!(plan)
-      end.should raise_error(DataImport::CircularDependencyError)
+      end.to raise_error(DataImport::CircularDependencyError)
     end
   end
 
@@ -95,9 +95,9 @@ describe 'definition dependencies' do
     end
 
     it 'recognizes missing dependencies' do
-      lambda do
+      expect do
         DataImport.run_plan!(plan)
-      end.should raise_error(DataImport::MissingDefinitionError)
+      end.to raise_error(DataImport::MissingDefinitionError)
     end
   end
 
@@ -130,9 +130,9 @@ describe 'definition dependencies' do
     end
 
     it 'recognizes unloaded dependencies' do
-      lambda do
+      expect do
         DataImport.run_plan!(plan, :only => ['Cats'])
-      end.should raise_error(DataImport::MissingDefinitionError)
+      end.to raise_error(DataImport::MissingDefinitionError)
     end
   end
 end

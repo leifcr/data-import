@@ -18,7 +18,7 @@ describe "import with a script" do
         if source_database[:tblAnimal].filter(:name => 'Lion').empty?
           target_database[:animals].insert(:name => 'Lion', :king => true)
         end
-        progress_reporter.inc 100
+        progress_reporter.increment 100
       end
     end
   end
@@ -43,6 +43,6 @@ describe "import with a script" do
   it 'executes the script' do
     DataImport.run_plan!(plan)
 
-    target_database[:animals].filter(:king => true).first[:name].should == 'Lion'
+    expect(target_database[:animals].filter(:king => true).first[:name]).to eq('Lion')
   end
 end

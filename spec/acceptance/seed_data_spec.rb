@@ -33,8 +33,8 @@ describe 'seed data' do
 
   it 'should add the seeded columns' do
     DataImport.run_plan!(plan)
-    target_database[:cargo].to_a.should == [{:id => 34, :type => 'imported', :source => 'TB_CARGO', :created_at => Date.new(2012, 01, 15)},
+    expect(target_database[:cargo].to_a).to eq([{:id => 34, :type => 'imported', :source => 'TB_CARGO', :created_at => Date.new(2012, 01, 15)},
                                             {:id => 78, :type => 'imported', :source => 'TB_CARGO', :created_at => Date.new(2012, 01, 15)},
-                                            {:id => 92, :type => 'imported', :source => 'TB_CARGO', :created_at => Date.new(2012, 01, 15)}]
+                                            {:id => 92, :type => 'imported', :source => 'TB_CARGO', :created_at => Date.new(2012, 01, 15)}])
   end
 end
