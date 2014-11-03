@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
+  s.add_development_dependency 'rspec-collection_matchers'
   s.add_development_dependency "sqlite3"
 
   s.add_development_dependency "flay"
