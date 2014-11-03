@@ -13,7 +13,7 @@ msg = <<-RUBY
   source 'sqlite:/'
   target 'sqlite:/'
 RUBY
-        allow(File).to receive_messages(msg).and_return
+        allow(File).to receive(msg).and_return
         DataImport::ExecutionPlan.should_receive(:new).and_return(plan)
         result = subject.evaluate_import_config('my_file')
         result.should == plan
@@ -32,14 +32,14 @@ RUBY
 
       let(:source) { Object.new }
       it "sets the source" do
-        allow(DataImport::Database).to recieve(:connect).and_return { source }
+        allow(DataImport::Database).to receive(:connect).and_return { source }
         subject.source :options
         subject.source_database.should == source
       end
 
       it 'adds the before block to source database when specified' do
         my_filter = lambda {}
-        allow(DataImport::Database).to recieve(:connect).and_return { source }
+        allow(DataImport::Database).to receive(:connect).and_return { source }
         source.should_receive(:before_filter=).with(my_filter)
         plan = DataImport::Dsl.define do
           source 'sqlite:/'
@@ -56,7 +56,7 @@ RUBY
 
       let(:target) { Object.new }
       it "sets the target" do
-        allow(DataImport::Database).to recieve(:connect).and_return { target }
+        allow(DataImport::Database).to receive(:connect).and_return { target }
         subject.target :options
         subject.target_database.should == target
       end
@@ -64,8 +64,8 @@ RUBY
 
     describe "#import" do
       it "adds a new import config to the import" do
-        allow(subject).to recieve(:source_database).and_return { nil }
-        allow(subject).to recieve(:target_database).and_return { nil }
+        allow(subject).to receive(:source_database).and_return { nil }
+        allow(subject).to receive(:target_database).and_return { nil }
 
         definition = double
         DataImport::Definition::Simple.should_receive(:new).with('Import 5', nil, nil).and_return(definition)
@@ -74,8 +74,8 @@ RUBY
       end
 
       it "sets the source and target database in the definition" do
-        allow(subject).to recieve(:source_database).and_return { :source }
-        allow(subject).to recieve(:target_database).and_return { :target }
+        allow(subject).to receive(:source_database).and_return { :source }
+        allow(subject).to receive(:target_database).and_return { :target }
 
         definition = double
         DataImport::Definition::Simple.should_receive(:new).with('a', :source, :target).and_return(definition)
@@ -85,8 +85,8 @@ RUBY
       end
 
       it "executes the block in an import context" do
-        allow(subject).to recieve(:source_database).and_return { nil }
-        allow(subject).to recieve(:target_database).and_return { nil }
+        allow(subject).to receive(:source_database).and_return { nil }
+        allow(subject).to receive(:target_database).and_return { nil }
 
         my_block = lambda {}
         import_dsl = double
@@ -104,8 +104,8 @@ RUBY
       let(:definition) { double }
 
       it "adds a new script config to the import" do
-        allow(subject).to recieve(:source_database).and_return { nil }
-        allow(subject).to recieve(:target_database).and_return { nil }
+        allow(subject).to receive(:source_database).and_return { nil }
+        allow(subject).to receive(:target_database).and_return { nil }
 
         DataImport::Definition::Script.should_receive(:new).with('Script', nil, nil).and_return(definition)
         plan.should_receive(:add_definition).with(definition)
@@ -113,8 +113,8 @@ RUBY
       end
 
       it "sets the source and target database in the definition" do
-        allow(subject).to recieve(:source_database).and_return { :source }
-        allow(subject).to recieve(:target_database).and_return { :target }
+        allow(subject).to receive(:source_database).and_return { :source }
+        allow(subject).to receive(:target_database).and_return { :target }
 
         DataImport::Definition::Script.should_receive(:new).with('a', :source, :target).and_return(definition)
         plan.should_receive(:add_definition).with(definition)
@@ -123,8 +123,8 @@ RUBY
       end
 
       it "executes the block in an script conext" do
-        allow(subject).to recieve(:source_database).and_return { nil }
-        allow(subject).to recieve(:target_database).and_return { nil }
+        allow(subject).to receive(:source_database).and_return { nil }
+        allow(subject).to receive(:target_database).and_return { nil }
 
         my_block = lambda {}
         script_dsl = double
