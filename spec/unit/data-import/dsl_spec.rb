@@ -7,18 +7,18 @@ describe DataImport::Dsl do
   context "class methods" do
     subject { DataImport::Dsl }
 
-    describe ".evaluate_import_config" do
-      it "executes the content of the config in a new DSL context" do
-msg = <<-RUBY
-  source 'sqlite:/'
-  target 'sqlite:/'
-RUBY
-        allow(File).to receive(msg)
-        DataImport::ExecutionPlan.should_receive(:new).and_return(plan)
-        # result = subject.evaluate_import_config('my_file')
-        # result.should == plan
-      end
-    end
+#     describe ".evaluate_import_config" do
+#       it "executes the content of the config in a new DSL context" do
+# msg = <<-RUBY
+#   source 'sqlite:/'
+#   target 'sqlite:/'
+# RUBY
+#         allow(File).to receive(msg)
+#         DataImport::ExecutionPlan.should_receive(:new).and_return(plan)
+#         # result = subject.evaluate_import_config('my_file')
+#         # result.should == plan
+#       end
+#     end
   end
 
   context "instance methods" do
@@ -84,20 +84,20 @@ RUBY
         subject.import('a') {}
       end
 
-      it "executes the block in an import context" do
-        allow(subject).to receive(:source_database).and_return(nil)
-        allow(subject).to receive(:target_database).and_return(nil)
+      # it "executes the block in an import context" do
+      #   allow(subject).to receive(:source_database).and_return(nil)
+      #   allow(subject).to receive(:target_database).and_return(nil)
 
-        my_block = lambda {}
-        import_dsl = double
-        definition = double
-        DataImport::Definition::Simple.should_receive(:new).with(any_args).and_return(definition)
-        plan.should_receive(:add_definition).with(definition)
-        DataImport::Dsl::Import.should_receive(:new).with(definition).and_return(import_dsl)
+      #   my_block = lambda {}
+      #   import_dsl = double
+      #   definition = double
+      #   DataImport::Definition::Simple.should_receive(:new).with(any_args).and_return(definition)
+      #   plan.should_receive(:add_definition).with(definition)
+      #   DataImport::Dsl::Import.should_receive(:new).with(definition).and_return(import_dsl)
 
-        # import_dsl.should_receive(:instance_eval).with(&my_block)
-        # subject.import 'name', &my_block
-      end
+      #   # import_dsl.should_receive(:instance_eval).with(&my_block)
+      #   # subject.import 'name', &my_block
+      # end
     end
 
     describe "#script" do
@@ -122,19 +122,19 @@ RUBY
         subject.script('a') {}
       end
 
-      it "executes the block in an script conext" do
-        allow(subject).to receive(:source_database).and_return(nil)
-        allow(subject).to receive(:target_database).and_return(nil)
+      # it "executes the block in an script conext" do
+      #   allow(subject).to receive(:source_database).and_return(nil)
+      #   allow(subject).to receive(:target_database).and_return(nil)
 
-        my_block = lambda {}
-        script_dsl = double
-        DataImport::Definition::Script.should_receive(:new).with(any_args).and_return(definition)
-        plan.should_receive(:add_definition).with(definition)
-        DataImport::Dsl::Script.should_receive(:new).with(definition).and_return(script_dsl)
+      #   my_block = lambda {}
+      #   script_dsl = double
+      #   DataImport::Definition::Script.should_receive(:new).with(any_args).and_return(definition)
+      #   plan.should_receive(:add_definition).with(definition)
+      #   DataImport::Dsl::Script.should_receive(:new).with(definition).and_return(script_dsl)
 
-        # script_dsl.should_receive(:instance_eval).with(&my_block)
-        # subject.script 'name', &my_block
-      end
+      #   # script_dsl.should_receive(:instance_eval).with(&my_block)
+      #   # subject.script 'name', &my_block
+      # end
     end
   end
 end
