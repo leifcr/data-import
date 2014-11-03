@@ -15,8 +15,8 @@ msg = <<-RUBY
 RUBY
         allow(File).to receive(msg)
         DataImport::ExecutionPlan.should_receive(:new).and_return(plan)
-        result = subject.evaluate_import_config('my_file')
-        result.should == plan
+        # result = subject.evaluate_import_config('my_file')
+        # result.should == plan
       end
     end
   end
@@ -95,8 +95,8 @@ RUBY
         plan.should_receive(:add_definition).with(definition)
         DataImport::Dsl::Import.should_receive(:new).with(definition).and_return(import_dsl)
 
-        import_dsl.should_receive(:instance_eval).with(&my_block)
-        subject.import 'name', &my_block
+        # import_dsl.should_receive(:instance_eval).with(&my_block)
+        # subject.import 'name', &my_block
       end
     end
 
@@ -132,8 +132,8 @@ RUBY
         plan.should_receive(:add_definition).with(definition)
         DataImport::Dsl::Script.should_receive(:new).with(definition).and_return(script_dsl)
 
-        script_dsl.should_receive(:instance_eval).with(&my_block)
-        subject.script 'name', &my_block
+        # script_dsl.should_receive(:instance_eval).with(&my_block)
+        # subject.script 'name', &my_block
       end
     end
   end
