@@ -14,35 +14,35 @@ describe DataImport::Definition::Lookup do
     it 'knows what attributes have a lookup-table' do
       subject.lookup_for :code
 
-      subject.has_lookup_table_on?(:code).should be_true
+      expect(subject.has_lookup_table_on?(:code)).to be_true
     end
 
     it 'knows what attributes do not have a lookup-table' do
       subject.lookup_for :code
 
-      subject.has_lookup_table_on?(:oldID).should be_false
-      subject.has_lookup_table_on?(:strRef).should be_false
-      subject.has_lookup_table_on?(:abcd).should be_false
+      expect(subject.has_lookup_table_on?(:oldID)).to be_false
+      expect(subject.has_lookup_table_on?(:strRef)).to be_false
+      expect(subject.has_lookup_table_on?(:abcd)).to be_false
     end
 
     it 'allows to define lookup-tables with multiple calls' do
       subject.lookup_for :code
       subject.lookup_for :strRef
 
-      subject.has_lookup_table_on?(:code).should be_true
-      subject.has_lookup_table_on?(:strRef).should be_true
+      expect(subject.has_lookup_table_on?(:code)).to be_true
+      expect(subject.has_lookup_table_on?(:strRef)).to be_true
     end
 
     it 'works with strings' do
       subject.lookup_for 'a_string'
 
-      subject.has_lookup_table_on?(:a_string).should be_true
+      expect(subject.has_lookup_table_on?(:a_string)).to be_true
     end
 
     it 'works with symbols' do
       subject.lookup_for :a_symbol
 
-      subject.has_lookup_table_on?('a_symbol').should be_true
+      expect(subject.has_lookup_table_on?('a_symbol')).to be_true
     end
 
     it 'should not allow to define two lookup-tables with the same name' do
