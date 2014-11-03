@@ -14,7 +14,8 @@ module DataImport
         bar = ProgressBar.create( format: '%a %bᗧ%i %p%% %t',
                     progress_mark:  ' ',
                     remainder_mark: '･',
-                    title: definition.name )
+                    title: definition.name,
+                    total:  definition.total_steps_required )
         DataImport.logger.info "Starting to import \"#{definition.name}\""
         context = ExecutionContext.new(resolved_plan, definition, bar)
         definition.run context
