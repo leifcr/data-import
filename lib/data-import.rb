@@ -1,5 +1,5 @@
 require 'yaml'
-require 'progressbar'
+require 'ruby-progressbar'
 require 'ostruct'
 require 'active_support/all'
 

@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "roodi"
 
   s.add_runtime_dependency "sequel"
-  s.add_runtime_dependency "progressbar"
+  s.add_runtime_dependency "ruby-progressbar"
   if Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new('1.9.3')
     s.add_runtime_dependency "activesupport", '>= 3.1.1', '< 4.0.0'
   else

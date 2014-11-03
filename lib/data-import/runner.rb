@@ -10,8 +10,10 @@ module DataImport
       dependency_resolver = DependencyResolver.new(@plan)
       resolved_plan = dependency_resolver.resolve(:run_only => options[:only])
       resolved_plan.definitions.each do |definition|
-        bar = @progress_reporter.new(definition.name, definition.total_steps_required)
-
+        # pacman progressbar...
+        bar = ProgressBar.create( :format         => '%a %bᗧ%i %p%% %t',
+                    :progress_mark  => ' ',
+                    :remainder_mark => '･')
         DataImport.logger.info "Starting to import \"#{definition.name}\""
         context = ExecutionContext.new(resolved_plan, definition, bar)
         definition.run context
