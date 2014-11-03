@@ -11,7 +11,7 @@ module DataImport
       resolved_plan = dependency_resolver.resolve(:run_only => options[:only])
       resolved_plan.definitions.each do |definition|
         # pacman progressbar...
-        bar = ProgressBar.create( format: '%a %bᗧ%i %p%% %t',
+        bar = ProgressBar.create( format: '%t %bᗧ%i %p%% %a',
                     progress_mark:  ' ',
                     remainder_mark: '･',
                     title: definition.name,
