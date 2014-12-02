@@ -12,7 +12,7 @@ gem 'data-import'
 ```
 
 you can put your migration configuration in any file you like. We suggest something like `mapping.rb`.
-You can find the various ways to connect described in the [sequel docs](http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html).
+You can find the various ways to connect described in the [sequel docs](http://sequel.jeremyevans.net/documentation.html).
 
 ```ruby
 source 'sqlite://legacy_blog.db'
